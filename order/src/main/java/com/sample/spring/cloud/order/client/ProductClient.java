@@ -1,6 +1,6 @@
 package com.sample.spring.cloud.order.client;
 
-import com.sample.spring.cloud.order.model.Product;
+import com.sample.spring.cloud.order.dto.Product;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

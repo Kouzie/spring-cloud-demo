@@ -1,5 +1,6 @@
 package com.sample.spring.cloud.order;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sample.spring.cloud.order.repository.OrderRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -31,12 +32,12 @@ public class OrderApplication {
         return new RestTemplate();
     }
 
-    public static void main(String[] args) {
-        SpringApplication.run(OrderApplication.class, args);
+    @Bean
+    ObjectMapper objectMapper() {
+        return new ObjectMapper();
     }
 
-    @Bean
-    OrderRepository repository() {
-        return new OrderRepository();
+    public static void main(String[] args) {
+        SpringApplication.run(OrderApplication.class, args);
     }
 }

@@ -1,7 +1,7 @@
 package com.sample.spring.cloud.product.controller;
 
 import com.sample.spring.cloud.product.model.Product;
-import com.sample.spring.cloud.product.repository.ProductRepository;
+import com.sample.spring.cloud.product.service.ProductService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -19,7 +19,7 @@ public class ProductController {
     private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    ProductRepository repository;
+    ProductService repository;
 
     @Value("${server.port}")
     String port;

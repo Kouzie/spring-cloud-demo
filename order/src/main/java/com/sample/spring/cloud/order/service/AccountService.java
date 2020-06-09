@@ -1,7 +1,7 @@
 package com.sample.spring.cloud.order.service;
 
 import com.sample.spring.cloud.order.client.AccountClient;
-import com.sample.spring.cloud.order.model.Account;
+import com.sample.spring.cloud.order.dto.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

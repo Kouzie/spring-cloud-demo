@@ -1,5 +1,6 @@
 package com.sample.spring.cloud.customer;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sample.spring.cloud.customer.model.Customer;
 import com.sample.spring.cloud.customer.model.CustomerType;
 import com.sample.spring.cloud.customer.repository.CustomerRepository;
@@ -17,7 +18,6 @@ import org.springframework.web.client.RestTemplate;
 @EnableDiscoveryClient
 @EnableCaching
 @EnableHystrix
-//@EnableHystrixDashboard
 @RibbonClient(name = "account-service")
 public class CustomerApplication {
 
@@ -32,12 +32,8 @@ public class CustomerApplication {
     }
 
     @Bean
-    CustomerRepository repository() {
-        CustomerRepository repository = new CustomerRepository();
-        repository.add(new Customer("John Scott", CustomerType.NEW));
-        repository.add(new Customer("Adam Smith", CustomerType.REGULAR));
-        repository.add(new Customer("Jacob Ryan", CustomerType.VIP));
-        return repository;
+    ObjectMapper objectMapper() {
+        return new ObjectMapper();
     }
 }
 

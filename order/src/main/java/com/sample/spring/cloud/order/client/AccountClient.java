@@ -1,6 +1,6 @@
 package com.sample.spring.cloud.order.client;
 
-import com.sample.spring.cloud.order.model.Account;
+import com.sample.spring.cloud.order.dto.Account;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,10 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
 
-@FeignClient(
-        name = "account-service",
-        fallbackFactory = AccountClientFallbackFactory.class
-)
+@FeignClient(name = "account-service", fallbackFactory = AccountClientFallbackFactory.class)
 public interface AccountClient {
 
     @PutMapping("/withdraw/{id}/{amount}")

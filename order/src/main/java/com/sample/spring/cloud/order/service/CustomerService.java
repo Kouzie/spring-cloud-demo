@@ -1,7 +1,7 @@
 package com.sample.spring.cloud.order.service;
 
 import com.sample.spring.cloud.order.client.CustomerClient;
-import com.sample.spring.cloud.order.model.Customer;
+import com.sample.spring.cloud.order.dto.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachePut;

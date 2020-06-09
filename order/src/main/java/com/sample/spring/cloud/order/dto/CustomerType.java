@@ -1,4 +1,4 @@
-package com.sample.spring.cloud.order.model;
+package com.sample.spring.cloud.order.dto;
 
 public enum CustomerType {
 

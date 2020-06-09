@@ -1,18 +1,71 @@
 package com.sample.spring.cloud.account.service;
 
 import com.sample.spring.cloud.account.model.Account;
-import org.springframework.web.bind.annotation.*;
+import com.sample.spring.cloud.account.repository.AccountRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-public interface AccountService {
-    @PostMapping
-    Account add(@RequestBody Account account);
+import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 
-    @PutMapping
-    Account update(@RequestBody Account account);
+@Service
+@RequiredArgsConstructor
+public class AccountService {
+    private final AccountRepository accountRepository;
 
-    @PutMapping("/withdraw/{id}/{amount}")
-    Account withdraw(@PathVariable("id") Long id, @PathVariable("amount") int amount);
+    @Transactional
+    @PostConstruct
+    public void init() {
+        List<Account> accountList = new ArrayList<>();
+        accountList.add(new Account("1234567892", 0, 1L));
+        accountList.add(new Account("1234567890", 100000, 1L));
+        accountList.add(new Account("1234567891", 200000, 1L));
+        accountList.add(new Account("1234567894", 0, 2L));
+        accountList.add(new Account("1234567893", 300000, 2L));
+        accountList.add(new Account("1234567895", 400000, 2L));
+        accountList.add(new Account("1234567896", 0, 3L));
+        accountList.add(new Account("1234567897", 500000, 3L));
+        accountList.add(new Account("1234567898", 600000, 3L));
+        accountRepository.saveAll(accountList);
+    }
 
-    @GetMapping("/{id}")
-    Account findById(@PathVariable("id") Long id);
+    @Transactional
+    public Account add(Account account) {
+        return accountRepository.save(account);
+    }
+
+    @Transactional
+    public Account update(Account account) {
+        return accountRepository.save(account);
+    }
+
+    @Transactional
+    public Account withdraw(Long id, int amount) {
+        Account account = accountRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(id + " account is not exist"));
+        account.setBalance(account.getBalance() - amount);
+        return accountRepository.save(account);
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        accountRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Account findById(Long id) {
+        return accountRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(id + " account is not exist"));
+    }
+
+    @Transactional(readOnly = true)
+    public List<Account> findByCustomer(Long customerId) {
+        return accountRepository.findAllByCustomerId(customerId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Account> findAllById(List<Long> ids) {
+        return accountRepository.findAllById(ids);
+    }
+
 }

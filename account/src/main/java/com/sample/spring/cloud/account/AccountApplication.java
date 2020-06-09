@@ -1,5 +1,6 @@
 package com.sample.spring.cloud.account;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sample.spring.cloud.account.model.Account;
 import com.sample.spring.cloud.account.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,27 +25,12 @@ public class AccountApplication {
         return new RestTemplate();
     }
 
+    @Bean
+    ObjectMapper objectMapper() {
+        return new ObjectMapper();
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(AccountApplication.class, args);
     }
-
-    @Bean
-    AccountRepository repository() {
-        AccountRepository repository = new AccountRepository();
-        if (zonename.equals("zone1")) {
-            repository.add(new Account("1234567890", 500000, 1L));
-        } else {
-            repository.add(new Account("1234567890", 200000, 1L));
-        }
-        repository.add(new Account("1234567891", 500000, 1L));
-        repository.add(new Account("1234567892", 0, 1L));
-        repository.add(new Account("1234567893", 500000, 2L));
-        repository.add(new Account("1234567894", 0, 2L));
-        repository.add(new Account("1234567895", 500000, 2L));
-        repository.add(new Account("1234567896", 0, 3L));
-        repository.add(new Account("1234567897", 500000, 3L));
-        repository.add(new Account("1234567898", 500000, 3L));
-        return repository;
-    }
-
 }
