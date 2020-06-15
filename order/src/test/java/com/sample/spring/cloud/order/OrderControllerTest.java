@@ -1,84 +1,65 @@
 package com.sample.spring.cloud.order;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sample.spring.cloud.order.dto.Customer;
+import com.sample.spring.cloud.order.dto.CustomerType;
 import com.sample.spring.cloud.order.model.Order;
-import com.sample.spring.cloud.order.model.OrderStatus;
-import io.specto.hoverfly.junit.core.HoverflyConfig;
-import io.specto.hoverfly.junit.rule.HoverflyRule;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.jupiter.api.Disabled;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.specto.hoverfly.junit.core.Hoverfly;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.test.context.TestPropertySource;
 
-import java.util.Arrays;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import static io.specto.hoverfly.junit.core.SimulationSource.dsl;
 import static io.specto.hoverfly.junit.dsl.HoverflyDsl.service;
 import static io.specto.hoverfly.junit.dsl.ResponseCreators.success;
-import static io.specto.hoverfly.junit.dsl.matchers.HoverflyMatchers.any;
 
-@Disabled
-@SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
-        properties = {
-                "spring.profiles.active=zone1"
-        }
-)
+@Slf4j
+@TestPropertySource(locations = "classpath:application-test.properties")
+@AutoConfigureMockMvc
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class OrderControllerTest {
-
-    private static Logger LOGGER = LoggerFactory.getLogger(OrderControllerTest.class);
 
     @Autowired
     TestRestTemplate template;
 
-    @ClassRule
-    public static HoverflyRule hoverflyRule = HoverflyRule
-            .inSimulationMode(dsl(
-                    service("192.168.100.101:8091")
-                            .andDelay(200, TimeUnit.MILLISECONDS)
-                            .forAll()
-                            .post(any()).anyQueryParams()
-                            .willReturn(
-                                    success("[{\"id\":\"1\",\"number\":\"1234567890\",\"balance\":5000}]",
-                                            "application/json").disableTemplating()
-                            ),
-                    service("192.168.100.101:9091")
-                            .andDelay(2000, TimeUnit.MILLISECONDS)
-                            .forAll()
-                            .post(any()).anyQueryParams()
-                            .willReturn(
-                                    success("[{\"id\":\"2\",\"number\":\"1234567891\",\"balance\":8000}]",
-                                            "application/json").disableTemplating()
-                            )
-            ), HoverflyConfig.localConfigs().addCommands("--disable-cache"))
-            .printSimulationData();
+    @Autowired
+    ObjectMapper objectMapper;
 
+    @BeforeEach
+    public void init(Hoverfly hoverfly) throws JsonProcessingException {
+        Customer customer = Customer.builder()
+                .id(1l)
+                .accounts(null)
+                .name("test")
+                .type(CustomerType.NEW)
+                .build();
+        log.info("customer:" + objectMapper.writeValueAsString(customer));
 
-    @Test
-    public void testOrder() throws InterruptedException {
-        for (int i = 0; i < 10000; i++) {
-            sendAndAcceptOrder();
-            Thread.sleep(100);
-        }
+        hoverfly.simulate(dsl(
+                service("customer-service:8081")
+                        .andDelay(50, TimeUnit.MILLISECONDS).forAll()
+                        .get("/withAccounts/1")
+                        .willReturn(success("{\"id\":1,\"name\":\"test\",\"type\":\"NEW\",\"accounts\":null}", "application/json")),
+                service("customer-service:9081")
+                        .andDelay(200, TimeUnit.MILLISECONDS).forAll()
+                        .get("/withAccounts/1")
+                        .willReturn(success("{\"id\":1,\"name\":\"test\",\"type\":\"NEW\",\"accounts\":null}", "application/json"))
+        ));
     }
 
-    private void sendAndAcceptOrder() {
-        try {
-            Random r = new Random();
-            Order order = new Order();
-            order.setCustomerId((long) r.nextInt(3)+1);
-            order.setProductIds(Arrays.asList(new Long[] {(long) r.nextInt(10)+1,(long) r.nextInt(10)+1}));
-            order = template.postForObject("http://localhost:9090", order, Order.class);
-            if (order.getStatus() != OrderStatus.REJECTED) {
-                template.put("http://localhost:9090/{id}", null, order.getId());
-            }
-        } catch (Exception e) {
-
+    @Test
+    public void testOrder() {
+        for (int i = 0; i < 10; i++) {
+            Order order = template.getForObject("/{id}", Order.class, 1);
+            System.out.println(i + ":" + order.toString());
         }
     }
 

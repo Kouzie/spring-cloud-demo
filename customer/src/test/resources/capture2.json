@@ -1,0 +1,77 @@
+{
+  "path": [
+    {
+      "matcher": "exact",
+      "value": "/customer/1"
+    }
+  ],
+  "method": [
+    {
+      "matcher": "exact",
+      "value": "GET"
+    }
+  ],
+  "destination": [
+    {
+      "matcher": "exact",
+      "value": "account-service:8080"
+    }
+  ],
+  "query": {},
+  "body": [
+    {
+      "matcher": "exact",
+      "value": ""
+    }
+  ]
+  "path": [
+    {
+      "matcher": "exact",
+      "value": "/customer/1"
+    }
+  ],
+  "method": [
+    {
+      "matcher": "exact",
+      "value": "GET"
+    }
+  ],
+  "destination": [
+    {
+      "matcher": "exact",
+      "value": "account-service:9080"
+    }
+  ],
+  "query": {},
+  "body": [
+    {
+      "matcher": "exact",
+      "value": ""
+    }
+  ]
+  "path": [
+    {
+      "matcher": "exact",
+      "value": "/customer/1"
+    }
+  ],
+  "method": [
+    {
+      "matcher": "exact",
+      "value": "GET"
+    }
+  ],
+  "destination": [
+    {
+      "matcher": "exact",
+      "value": "account-service:10080"
+    }
+  ],
+  "query": {},
+  "body": [
+    {
+      "matcher": "exact",
+      "value": ""
+    }
+  ]
+}

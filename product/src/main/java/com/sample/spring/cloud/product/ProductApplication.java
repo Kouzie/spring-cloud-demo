@@ -1,5 +1,6 @@
 package com.sample.spring.cloud.product;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -21,5 +22,10 @@ public class ProductApplication {
     @Bean
     RestTemplate restTemplate() {
         return new RestTemplate();
+    }
+
+    @Bean
+    ObjectMapper objectMapper() {
+        return new ObjectMapper();
     }
 }

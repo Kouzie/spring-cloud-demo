@@ -27,7 +27,7 @@ public class OrderController {
     private final ObjectMapper mapper;
     private final OrderService orderService;
     private final ProductClient productClient;
-    private final AccountClient accountService;
+    private final AccountClient accountClient;
     private final CustomerClient customerClient;
 
     @PostMapping
@@ -41,6 +41,7 @@ public class OrderController {
 
         for (Product product : products)
             price += product.getPrice();
+
         final int priceDiscounted = priceDiscount(price, customer);
         log.info("Discounted price: {}", mapper.writeValueAsString(Collections.singletonMap("price", priceDiscounted)));
         Optional<Account> account = customer.getAccounts().stream().filter(a -> (a.getBalance() > priceDiscounted)).findFirst();
@@ -59,8 +60,8 @@ public class OrderController {
     @PutMapping("/{id}")
     public Order accept(@PathVariable Long id) {
         Order order = orderService.findById(id);
-        //restTemplate.put("http://account-service/withdraw/{id}/{amount}", null, order.getAccountId(), order.getPrice());
-        Account account = accountService.withdrawById(order.getAccountId(), order.getPrice());
+        Account account = accountClient.withdraw(order.getAccountId(), order.getPrice());
+        log.info("withdraw result:" +account.toString());
         order.setStatus(OrderStatus.DONE);
         order = orderService.update(order);
         return order;
@@ -81,5 +82,13 @@ public class OrderController {
         int ordersNum = orderService.countByCustomerId(customer.getId());
         discount += (ordersNum * 0.01);
         return (int) (price - (price * discount));
+    }
+
+    @GetMapping("/{id}")
+    public Order getOrder(@PathVariable Long id) {
+        Order order = orderService.findById(id);
+        Customer customer = customerClient.findByIdWithAccounts(order.getAccountId());
+        log.info("customer:" + customer.toString());
+        return order;
     }
 }

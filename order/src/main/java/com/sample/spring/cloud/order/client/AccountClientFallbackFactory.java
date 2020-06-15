@@ -22,7 +22,7 @@ public class AccountClientFallbackFactory implements FallbackFactory<AccountClie
     public AccountClient create(Throwable throwable) {
         return new AccountClient() {
             @Override
-            public Account withdrawById(Long id, Integer amount) {
+            public Account withdraw(Long id, Integer amount) {
                 log.info("withdrawById called" + throwable.getMessage());
                 return new Account();
             }

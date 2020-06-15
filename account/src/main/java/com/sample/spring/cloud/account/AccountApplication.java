@@ -1,8 +1,6 @@
 package com.sample.spring.cloud.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sample.spring.cloud.account.model.Account;
-import com.sample.spring.cloud.account.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
