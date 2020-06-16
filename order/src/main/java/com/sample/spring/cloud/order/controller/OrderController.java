@@ -57,9 +57,9 @@ public class OrderController {
         return orderService.add(order);
     }
 
-    @PutMapping("/{id}")
-    public Order accept(@PathVariable Long id) {
-        Order order = orderService.findById(id);
+    @PutMapping("/{orderId}")
+    public Order accept(@PathVariable Long orderId) {
+        Order order = orderService.findById(orderId);
         Account account = accountClient.withdraw(order.getAccountId(), order.getPrice());
         log.info("withdraw result:" +account.toString());
         order.setStatus(OrderStatus.DONE);

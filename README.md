@@ -1,5 +1,7 @@
 # sample-spring-cloud
 
+`Hoxton.SR4` 기반 spring cloud 예제   
+
 `account`, `customer` `ribbon` 을 사용한 client side load balancing 지원
 `order` `feign` 을 사용한 client side load balancing
 

@@ -97,9 +97,9 @@
         <module>cloudconfig</module>
         <module>eurekaserver</module>
         <module>gateway</module>
-        <module>hystrix</module>
         <module>admin</module>
         <module>hystrix-dashboard</module>
+        <module>zuul</module>
     </modules>
 
 

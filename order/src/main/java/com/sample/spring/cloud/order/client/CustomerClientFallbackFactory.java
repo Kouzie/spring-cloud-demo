@@ -19,13 +19,13 @@ public class CustomerClientFallbackFactory implements FallbackFactory<CustomerCl
 
     @Override
     public CustomerClient create(Throwable throwable) {
-        return customerId -> {
-            log.info("findByIdWithAccounts called" + throwable.getMessage());
-            Cache.ValueWrapper w = cacheManager.getCache("customers").get(customerId);
-            if (w != null) {
-                return (Customer) w.get();
-            } else {
-                return new Customer();
+        return new CustomerClient() {
+            @Override
+            public Customer findByIdWithAccounts(Long id) {
+                log.info("findByIdWithAccounts called" + throwable.getMessage());
+                Cache.ValueWrapper w = cacheManager.getCache("customers").get(id);
+                if (w != null) return (Customer) w.get();
+                else return new Customer();
             }
         };
     }

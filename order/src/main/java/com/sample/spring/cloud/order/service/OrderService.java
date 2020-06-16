@@ -17,12 +17,14 @@ public class OrderService {
 
     @PostConstruct
     private void init() {
-        Order order = new Order();
-        order.setAccountId(1l);
-        order.setCustomerId(1l);
-        order.setPrice(100);
-        order.setStatus(OrderStatus.REJECTED);
-        orderRepository.save(order);
+        for (long i = 0; i < 3; i++) {
+            Order order = new Order();
+            order.setAccountId(i);
+            order.setCustomerId(i);
+            order.setPrice(100);
+            order.setStatus(OrderStatus.values()[(int) i]);
+            orderRepository.save(order);
+        }
     }
 
     public Order add(Order order) {
