@@ -20,6 +20,7 @@
     </properties>
 
     <dependencies>
+        <!-- test 와 actuator 의 경우 모든 service 에서 사용 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -37,24 +38,19 @@
             <version>0.13.0</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
-        </dependency>
-
+        <!-- 모니터링은 위한 admin-client 역시 모든 service 에서 사용 -->
         <dependency>
             <groupId>de.codecentric</groupId>
             <artifactId>spring-boot-admin-starter-client</artifactId>
             <version>2.2.3</version>
         </dependency>
 
-        <!-- 모든 application 에서 config 를 사용함으로(eureka server 제외) 그냥 root pom 에 지정함-->
+        <!-- eureka server 제외하고 모든 application 에서 config 를 사용함 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-config</artifactId>
@@ -64,17 +60,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-sleuth</artifactId>
-        </dependency>
-
-        <!--<dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-zipkin</artifactId>
-        </dependency>-->
-
     </dependencies>
 
     <dependencyManagement>

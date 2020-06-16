@@ -19,8 +19,10 @@ public class PrintHeaderFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         List<String> headerNames = Collections.list(httpServletRequest.getHeaderNames());
+        log.info("requestUrl:" + httpServletRequest.getRequestURL());
         for (String headerName : headerNames) {
             log.info("requestHeader:" + headerName + ":" + httpServletRequest.getHeader(headerName));
         }
+        filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 }

@@ -1,23 +1,29 @@
 <configuration>
+    <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener"/>
+    <contextName>sample-spring-cloud</contextName>
+    <property resource="bootstrap.properties"/>
+    <property name="logHome" value="${HOME}/sample-spring-cloud/logs"/>
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>INFO</level>
-        </filter>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %-5level %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{50} - %msg%n</pattern>
             <charset>utf8</charset>
         </encoder>
     </appender>
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${spring.application.name}.%d{yyyy-MM-dd}.log</fileNamePattern>
-            <maxHistory>10</maxHistory>
-            <totalSizeCap>1GB</totalSizeCap>
+            <fileNamePattern>${logHome}/%d{yyyyMMdd}/${spring.application.name}.%d{yyyyMMdd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>15MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>90</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %-5level %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{50} - %msg%n</pattern>
+            <charset>utf8</charset>
         </encoder>
     </appender>
+
+
     <appender name="STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
         <destination>localhost:5000</destination>
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
@@ -27,7 +33,9 @@
                 <logLevel/>
                 <loggerName/>
                 <pattern>
-                    <pattern>{"appName": "${spring.application.name}"}</pattern>
+                    <pattern>
+                        {"appName": "sample-spring-cloud-${spring.application.name}"}
+                    </pattern>
                 </pattern>
                 <threadName/>
                 <message/>
