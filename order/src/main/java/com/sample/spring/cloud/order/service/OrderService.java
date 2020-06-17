@@ -19,8 +19,8 @@ public class OrderService {
     private void init() {
         for (long i = 0; i < 3; i++) {
             Order order = new Order();
-            order.setAccountId(i);
-            order.setCustomerId(i);
+            order.setAccountId(i+1);
+            order.setCustomerId(i+1);
             order.setPrice(100);
             order.setStatus(OrderStatus.values()[(int) i]);
             orderRepository.save(order);
