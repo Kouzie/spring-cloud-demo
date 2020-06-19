@@ -1,17 +1,23 @@
 package com.sample.spring.cloud.product.service;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sample.spring.cloud.product.dto.Order;
 import com.sample.spring.cloud.product.model.Product;
 import com.sample.spring.cloud.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -21,16 +27,16 @@ public class ProductService {
     @Transactional
     public void init() {
         List<Product> productList = new ArrayList<>();
-        productList.add(new Product("Test1", 1000));
-        productList.add(new Product("Test2", 1500));
-        productList.add(new Product("Test3", 2000));
-        productList.add(new Product("Test4", 3000));
-        productList.add(new Product("Test5", 1300));
-        productList.add(new Product("Test6", 2700));
-        productList.add(new Product("Test7", 3500));
-        productList.add(new Product("Test8", 1250));
-        productList.add(new Product("Test9", 2450));
-        productList.add(new Product("Test10", 800));
+        productList.add(new Product("Test1", 1000, 10));
+        productList.add(new Product("Test2", 1500, 10));
+        productList.add(new Product("Test3", 2000, 20));
+        productList.add(new Product("Test4", 3000, 20));
+        productList.add(new Product("Test5", 1300, 10));
+        productList.add(new Product("Test6", 2700, 20));
+        productList.add(new Product("Test7", 3500, 40));
+        productList.add(new Product("Test8", 1250, 30));
+        productList.add(new Product("Test9", 2450, 10));
+        productList.add(new Product("Test10", 800, 20));
         productRepository.saveAll(productList);
     }
 
