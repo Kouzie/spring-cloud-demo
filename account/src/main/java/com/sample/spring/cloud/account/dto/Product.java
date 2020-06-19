@@ -1,4 +1,5 @@
-package com.sample.spring.cloud.order.dto;
+package com.sample.spring.cloud.account.dto;
+
 
 import lombok.*;
 
@@ -12,5 +13,4 @@ public class Product {
     private String name;
     private int price;
     private int count;
-
 }

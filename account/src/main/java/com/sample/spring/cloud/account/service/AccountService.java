@@ -3,6 +3,7 @@ package com.sample.spring.cloud.account.service;
 import com.sample.spring.cloud.account.model.Account;
 import com.sample.spring.cloud.account.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +11,7 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AccountService {
@@ -59,7 +61,7 @@ public class AccountService {
     }
 
     @Transactional(readOnly = true)
-    public List<Account> findByCustomer(Long customerId) {
+    public List<Account> findAllByCustomerId(Long customerId) {
         return accountRepository.findAllByCustomerId(customerId);
     }
 
@@ -67,5 +69,4 @@ public class AccountService {
     public List<Account> findAllById(List<Long> ids) {
         return accountRepository.findAllById(ids);
     }
-
 }
