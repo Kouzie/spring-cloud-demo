@@ -1,0 +1,20 @@
+def eureka_client = [
+        project(':component:cloud-config'),
+        project(':component:gateway'),
+        project(':component:hystrix-dashboard'),
+        project(':component:zuul'),
+]
+
+configure(eureka_client) {
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-security'
+        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    }
+}
+
+configure(project(':component:eureka-server')) {
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-security'
+        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+    }
+}
