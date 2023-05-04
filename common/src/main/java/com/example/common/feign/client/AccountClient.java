@@ -1,4 +1,4 @@
-package com.example.common.feign;
+package com.example.common.feign.client;
 
 import com.example.common.dto.Account;
 import org.springframework.cloud.openfeign.FeignClient;

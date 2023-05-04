@@ -1,8 +1,8 @@
 package com.example.app.customer.service;
 
-import com.example.app.customer.repository.CustomerRepository;
 import com.example.app.customer.model.Customer;
 import com.example.app.customer.model.CustomerType;
+import com.example.app.customer.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

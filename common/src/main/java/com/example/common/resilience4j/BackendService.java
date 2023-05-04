@@ -1,4 +1,4 @@
-package com.example.common.service;
+package com.example.common.resilience4j;
 
 import java.time.LocalDateTime;
 

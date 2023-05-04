@@ -1,21 +1,15 @@
 package com.example.app.order.service;
 
-import com.example.common.exception.BusinessException;
+import com.example.common.exception.*;
 import io.github.resilience4j.bulkhead.BulkheadFullException;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead.Type;
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
-import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
-import io.github.resilience4j.timelimiter.TimeLimiterConfig;
 import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JCircuitBreakerFactory;
-import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigBuilder;
-import org.springframework.cloud.client.circuitbreaker.Customizer;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
@@ -39,12 +33,30 @@ public class BackendAService implements Service {
     private static final String BACKEND_A = "backendA";
 
     @Override
-    @CircuitBreaker(name = BACKEND_A)
-    @Bulkhead(name = BACKEND_A)
-    @Retry(name = BACKEND_A)
+    @CircuitBreaker(name = BACKEND_A, fallbackMethod = "failureFallback")
+    // @Retry(name = BACKEND_A, fallbackMethod = "failureFallback")
+    // @RateLimiter(name = BACKEND_A, fallbackMethod = "failureFallback")
+    // @Bulkhead(name = BACKEND_A, fallbackMethod = "failureFallback")
     public String failure() {
-        log.info("test failure");
+        log.info("failure invoked");
         throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "This is a remote exception");
+    }
+
+    public String failureFallback(Exception e) {
+        log.info("failureFallback invoked, error type:{}, msg:{}", e.getClass().getSimpleName(), e.getMessage());
+        if (e instanceof HttpServerErrorException)
+            throw new TestException1("test1");
+        else if (e instanceof TestException1)
+            throw new TestException2("test2");
+        else if (e instanceof TestException2)
+            throw new TestException3("test3");
+        else if (e instanceof TestException3)
+            throw new TestException4("test4");
+        else if (e instanceof TestException4)
+            throw new TestException5("test5");
+        else if (e instanceof TestException5)
+            throw new TestException6("test6");
+        return "failure invoked but return string";
     }
 
     @Override

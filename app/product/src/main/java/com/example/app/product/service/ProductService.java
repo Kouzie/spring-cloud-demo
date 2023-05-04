@@ -1,8 +1,8 @@
 package com.example.app.product.service;
 
 
-import com.example.app.product.repository.ProductRepository;
 import com.example.app.product.model.Product;
+import com.example.app.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

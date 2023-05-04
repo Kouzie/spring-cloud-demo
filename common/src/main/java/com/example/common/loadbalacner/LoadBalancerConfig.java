@@ -1,27 +1,19 @@
-package com.example.common.config;
+package com.example.common.loadbalacner;
 
-import org.springframework.cloud.client.DefaultServiceInstance;
-import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.loadbalancer.annotation.LoadBalancerClient;
-import org.springframework.cloud.loadbalancer.core.ReactorLoadBalancer;
-import org.springframework.cloud.loadbalancer.core.RoundRobinLoadBalancer;
-import org.springframework.cloud.loadbalancer.core.ServiceInstanceListSupplier;
-import org.springframework.cloud.loadbalancer.support.LoadBalancerClientFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.env.Environment;
 import org.springframework.web.client.RestTemplate;
-import reactor.core.publisher.Flux;
 
-import java.util.Arrays;
-import java.util.List;
-
+/**
+ * @LoadBalancerClient configuration 속성으로 알고리즘 변경 가능
+ * default org.springframework.cloud.loadbalancer.annotation.LoadBalancerClientConfiguration
+ */
 @Configuration
 @LoadBalancerClient(name = "demo-lb", configuration = CustomLoadBalancerConfiguration.class)
 public class LoadBalancerConfig {
-
     @LoadBalanced
     @Bean
     RestTemplate loadBalanced() {

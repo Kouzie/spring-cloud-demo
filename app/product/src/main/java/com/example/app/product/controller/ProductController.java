@@ -1,9 +1,9 @@
 package com.example.app.product.controller;
 
+import com.example.app.product.model.Product;
 import com.example.app.product.service.ProductService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.example.app.product.model.Product;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

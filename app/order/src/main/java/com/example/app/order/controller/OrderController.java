@@ -6,12 +6,10 @@ import com.example.common.dto.Account;
 import com.example.common.dto.Customer;
 import com.example.common.dto.OrderStatus;
 import com.example.common.dto.Product;
-import com.example.common.feign.AccountClient;
-import com.example.common.feign.CustomerClient;
-import com.example.common.feign.ProductClient;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.netflix.discovery.converters.Auto;
+import com.example.common.feign.client.AccountClient;
+import com.example.common.feign.client.CustomerClient;
+import com.example.common.feign.client.ProductClient;
+import com.example.common.feign.client.ProductRequestLine;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,19 +19,17 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/order")
 public class OrderController {
-    private final ObjectMapper mapper;
     private final OrderService orderService;
     private final AccountClient accountClient;
     private final CustomerClient customerClient;
     private final ProductClient productClient;
-
+    private final ProductRequestLine productService;
     @Autowired
     @LoadBalanced
     private RestTemplate loadBalanced;
@@ -41,6 +37,12 @@ public class OrderController {
     @GetMapping("/test")
     public String testMethod() {
         String result = loadBalanced.getForObject("http://product-service/product/test", String.class);
+        return result;
+    }
+
+    @GetMapping("/product/{productId}/line")
+    public Product testLineMethod(@PathVariable Long productId) {
+        Product result = productService.findById(productId);
         return result;
     }
 

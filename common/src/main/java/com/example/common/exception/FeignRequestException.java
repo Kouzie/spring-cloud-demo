@@ -1,12 +1,16 @@
-package com.example.common.feign;
+package com.example.common.exception;
 
 import feign.Response;
+import lombok.Getter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 @Slf4j
+@Getter
+@ToString
 public class FeignRequestException extends RuntimeException {
     private String reason;
 

@@ -1,7 +1,7 @@
 package com.example.app.order.client;
 
-import com.example.common.feign.AccountClient;
 import com.example.common.dto.Account;
+import com.example.common.feign.client.AccountClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;

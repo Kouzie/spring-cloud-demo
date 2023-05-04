@@ -1,27 +1,29 @@
-package com.example.common.config;
+package com.example.common.resilience4j;
 
 
-import com.example.common.service.BackendService;
 import io.github.resilience4j.bulkhead.Bulkhead;
+import io.github.resilience4j.bulkhead.BulkheadFullException;
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
-import io.github.resilience4j.common.circuitbreaker.configuration.CircuitBreakerConfigCustomizer;
 import io.github.resilience4j.core.RegistryStore;
 import io.github.resilience4j.core.registry.InMemoryRegistryStore;
+import io.github.resilience4j.decorators.Decorators;
 import io.github.resilience4j.retry.Retry;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.PostConstruct;
+import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
+
+import static java.util.Arrays.asList;
 
 
 @Slf4j
 @Configuration
-public class CircuitConfig {
+public class Resilience4jConfig {
 
     public static void main(String[] args) {
         BackendService backendService = new BackendService();
@@ -50,10 +52,20 @@ public class CircuitConfig {
         supplier = Bulkhead.decorateSupplier(bulkhead, supplier);
         String result = supplier.get();
         System.out.println(result);
+        Decorators.DecorateSupplier<String> decorateSupplier = Decorators.ofSupplier(supplier)
+                .withBulkhead(bulkhead)
+                .withCircuitBreaker(circuitBreaker)
+                .withFallback(asList(TimeoutException.class,
+                        CallNotPermittedException.class,
+                        BulkheadFullException.class), throwable -> "Hello from Recovery");
+        result = decorateSupplier.get();
+
     }
 
     @Bean
     public CircuitBreakerRegistry circuitBreakerRegistry() {
+        CircuitBreakerConfig cbc = CircuitBreakerConfig.custom()
+                .build();
         RegistryStore<CircuitBreaker> stores = new InMemoryRegistryStore<>();
         stores.putIfAbsent("backendA", CircuitBreaker.of("backendA", CircuitBreakerConfig
                 .from(CircuitBreakerConfig.ofDefaults())

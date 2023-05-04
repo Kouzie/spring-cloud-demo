@@ -3,7 +3,6 @@ package com.example.app.order.controller;
 
 import com.example.app.order.service.BackendAService;
 import com.example.app.order.service.BackendBService;
-import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;

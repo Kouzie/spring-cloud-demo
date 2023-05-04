@@ -1,12 +1,12 @@
 package com.example.app.customer.controller;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.app.customer.client.AccountClient;
 import com.example.app.customer.dto.Account;
 import com.example.app.customer.model.Customer;
 import com.example.app.customer.service.CustomerService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
