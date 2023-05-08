@@ -28,26 +28,6 @@ public class ProductController {
         return "server uuid:" + SEVER_UUID;
     }
 
-//    @StreamListener(Processor.INPUT)
-//    public void receiveOrder(Order order) throws JsonProcessingException {
-//        log.info("Order received: {}", mapper.writeValueAsString(order));
-//        for (Long productId : order.getProductIds()) {
-//            Product product = productService.findById(productId);
-//            if (product.getCount() == 0) {
-//                order.setStatus(OrderStatus.REJECTED);
-//                break;
-//            }
-//            product.setCount(product.getCount() - 1);
-//            productService.update(product);
-//            log.info("Product updated: {}", mapper.writeValueAsString(product));
-//        }
-//        if (order.getStatus() != OrderStatus.REJECTED) {
-//            order.setStatus(OrderStatus.ACCEPTED);
-//        }
-//        log.info("Order response sent: {}", mapper.writeValueAsString(Collections.singletonMap("status", order.getStatus())));
-//        orderSender.send(order);
-//    }
-
     @PostMapping
     public Product add(@RequestBody Product product) throws JsonProcessingException {
         log.info("Products add : {}", mapper.writeValueAsString(product));

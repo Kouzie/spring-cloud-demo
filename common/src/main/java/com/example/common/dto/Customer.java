@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Customer {
     private Long id;
-    private String name;
+    private Order name;
     private CustomerType type;
     private List<Account> accounts;
 }

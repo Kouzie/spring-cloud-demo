@@ -10,7 +10,7 @@ import lombok.*;
 public class Account {
 
     private Long id;
-    private String number;
+    private Order number;
     private int balance;
     private Long customerId;
 }

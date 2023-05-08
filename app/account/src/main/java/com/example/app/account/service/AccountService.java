@@ -61,6 +61,12 @@ public class AccountService {
     }
 
     @Transactional(readOnly = true)
+    public Account findFirstByCustomerId(Long id) {
+        return accountRepository.findFirstByCustomerId(id)
+                .orElseThrow(() -> new IllegalArgumentException(id + " account is not exist"));
+    }
+
+    @Transactional(readOnly = true)
     public List<Account> findAllByCustomerId(Long customerId) {
         return accountRepository.findAllByCustomerId(customerId);
     }

@@ -1,15 +1,15 @@
 package com.example.app.order.controller;
 
+import com.example.app.order.message.OrderMessageSender;
 import com.example.app.order.model.Order;
 import com.example.app.order.service.OrderService;
-import com.example.common.dto.Account;
-import com.example.common.dto.Customer;
-import com.example.common.dto.OrderStatus;
-import com.example.common.dto.Product;
+import com.example.common.dto.*;
 import com.example.common.feign.client.AccountClient;
 import com.example.common.feign.client.CustomerClient;
 import com.example.common.feign.client.ProductClient;
 import com.example.common.feign.client.ProductRequestLine;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +19,16 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/order")
 public class OrderController {
+    private final OrderMessageSender orderSender;
+    private final ObjectMapper mapper;
+
     private final OrderService orderService;
     private final AccountClient accountClient;
     private final CustomerClient customerClient;
@@ -52,7 +56,7 @@ public class OrderController {
         return products;
     }
 
-    /*@PostMapping
+    @PostMapping
     public Order prepare(@RequestBody Order order) throws JsonProcessingException {
         List<Product> products = productClient.findByIds(order.getProductIds());
         log.info("Products found: {}", mapper.writeValueAsString(products));
@@ -76,36 +80,6 @@ public class OrderController {
         }
         return orderService.add(order);
     }
-
-    // OrderSender 를 통해 order 를 메세지 브로커로 전달. account-service 가 받아 처리
-    @PostMapping
-    public Order process(@RequestBody Order order) throws JsonProcessingException {
-        order = orderService.add(order);
-        log.info("Order saved: {}", mapper.writeValueAsString(order));
-        return order;
-    }*/
-
-   /* @StreamListener(ProductOrder.INPUT)
-    public void receiveProductOrder(Order order) throws JsonProcessingException {
-        log.info("Order receiveProductOrder: {}", mapper.writeValueAsString(order));
-        order = orderService.findById(order.getId());
-        if (order.getStatus() != OrderStatus.REJECTED) {
-            order.setStatus(order.getStatus());
-            orderService.update(order);
-            log.info("Order status updated: {}", mapper.writeValueAsString(order));
-        }
-    }
-
-    @StreamListener(AccountOrder.INPUT)
-    public void receiveAccountOrder(Order order) throws JsonProcessingException {
-        log.info("Order receiveAccountOrder: {}", mapper.writeValueAsString(order));
-        order = orderService.findById(order.getId());
-        if (order.getStatus() != OrderStatus.REJECTED) {
-            order.setStatus(order.getStatus());
-            orderService.update(order);
-            log.info("Order status updated: {}", mapper.writeValueAsString(order));
-        }
-    }*/
 
     @PutMapping("/{orderId}")
     public Order accept(@PathVariable Long orderId) {
